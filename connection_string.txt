@@ -1,0 +1,3 @@
+"postgres://postgres:disturbed9@localhost:5432/gator"
+
+// conncection string for postgres server
