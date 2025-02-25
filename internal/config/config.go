@@ -15,7 +15,7 @@ type Config struct {
 	CurrentUserName string `json:"current_user_name"`
 }
 
-func Read() (Config, error) {
+func Read() (Config, error) { // reads the json file of my computer
 	configstruct := Config{}
 	homedir, err := os.UserHomeDir()
 	if err != nil {
@@ -39,7 +39,7 @@ func Read() (Config, error) {
 	if err != nil {
 		return configstruct, err
 	}
-	fmt.Printf("ConfigStruct: %+v\n", configstruct)
+	fmt.Printf("Current User: %+v\n", configstruct.CurrentUserName)
 
 	return configstruct, nil
 }
