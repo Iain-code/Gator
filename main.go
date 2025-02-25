@@ -43,6 +43,7 @@ func main() {
 	cmds.Register("users", state.HandlerUsers)       // lists all users
 	cmds.Register("agg", state.HandlerAgg)           // at the moment just gets the RSS feed but does nothing with it
 	cmds.Register("addfeed", state.HandlerAddFeed)   // adds a feed instance when given NAME + URL after addfeed
+	cmds.Register("feeds", state.HandlerFeeds)
 
 	if len(os.Args) < 2 {
 		log.Fatal("not enough args")

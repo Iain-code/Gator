@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -39,7 +38,6 @@ func Read() (Config, error) { // reads the json file of my computer
 	if err != nil {
 		return configstruct, err
 	}
-	fmt.Printf("Current User: %+v\n", configstruct.CurrentUserName)
 
 	return configstruct, nil
 }
