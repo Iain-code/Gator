@@ -51,7 +51,7 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 
-	html.UnescapeString(rss.Channel.Title)
+	html.UnescapeString(rss.Channel.Title) // removes all replacement char for things like < > ! etc
 	html.UnescapeString(rss.Channel.Description)
 
 	for _, item := range rss.Channel.Item {

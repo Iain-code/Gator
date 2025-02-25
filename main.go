@@ -37,12 +37,12 @@ func main() {
 	cmds := state.Commands{
 		RegisteredCommands: make(map[string]func(*state.State, state.Command) error),
 	}
-	cmds.Register("login", state.HandlerLogin)
-	cmds.Register("register", state.HandlerRegister)
-	cmds.Register("reset", state.HandlerReset)
-	cmds.Register("users", state.HandlerUsers)
-	cmds.Register("agg", state.HandlerAgg)         //
-	cmds.Register("addfeed", state.HandlerAddFeed) // adds a feed instance when given NAME + URL after addfeed
+	cmds.Register("login", state.HandlerLogin)       // user login
+	cmds.Register("register", state.HandlerRegister) // registers a user
+	cmds.Register("reset", state.HandlerReset)       // resets all users (deletes)
+	cmds.Register("users", state.HandlerUsers)       // lists all users
+	cmds.Register("agg", state.HandlerAgg)           // at the moment just gets the RSS feed but does nothing with it
+	cmds.Register("addfeed", state.HandlerAddFeed)   // adds a feed instance when given NAME + URL after addfeed
 
 	if len(os.Args) < 2 {
 		log.Fatal("not enough args")
