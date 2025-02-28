@@ -31,6 +31,12 @@ func scrapeFeeds(s *State) error {
 	}
 	fmt.Println("Fetched feed...")
 
+	var layouts = []string{
+		"Mon, 02 Jan 2006 15:04:05 MST", // Common RSS format
+		"2006-01-02T15:04:05Z",          // ISO 8601
+		"02-01-2006 15:04:05",           // Custom format
+		"2006-01-02 15:04:05",           // Another common format
+	}
 	for i := range gotFeed.Channel.Item {
 		createPost := database.CreatePostParams{}
 		createPost.ID = uuid.New()
@@ -41,18 +47,28 @@ func scrapeFeeds(s *State) error {
 		createPost.Description = gotFeed.Channel.Item[i].Description
 		createPost.FeedID = feed.ID
 		fmt.Printf("FEED ID: %v\n", feed.ID)
-		layout := "Mon, 02 Jan 2006 15:04:05 -0700"
+		pubDate := gotFeed.Channel.Item[i].PubDate
 
-		createPost.PublishedAt, err = time.Parse(layout, gotFeed.Channel.Item[i].PubDate)
-
-		err := s.Db.CreatePost(ctx, createPost)
-		fmt.Printf("Post Created: %v\n", createPost.Title)
-		if err != nil {
-			return err
+		for _, layout := range layouts {
+			PublishedAt, err := time.Parse(layout, pubDate)
+			if err == nil {
+				fmt.Println("Successfully parsed date:", PublishedAt)
+				createPost.PublishedAt = PublishedAt
+				break // Exit loop if parsing succeeds
+			}
 		}
+		// Handles the case where all attempts to parse fails
+		if err != nil {
+			fmt.Println("Error: Could not parse date:", pubDate, "Error:", err)
 
+			err = s.Db.CreatePost(ctx, createPost)
+			fmt.Printf("Post Created: %v\n", createPost.Title)
+			if err != nil {
+				return err
+			}
+
+		}
 	}
-
 	fmt.Println("")
 
 	return nil

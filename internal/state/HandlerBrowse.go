@@ -27,11 +27,11 @@ func HandlerBrowse(s *State, cmd Command, user database.User) error {
 	if err != nil {
 		return fmt.Errorf("GetPostsForUser did not return correct values")
 	}
-	fmt.Println(posts)
 
 	fmt.Printf("Found %d posts for user %s:\n", len(posts), user.Name)
 	for _, post := range posts {
-		fmt.Printf("%s from %s\n", post.PublishedAt.Format("Mon Jan 2"), post)
+
+		fmt.Printf("Post publish time: %v\n", post.PublishedAt)
 		fmt.Printf("--- %s ---\n", post.Title)
 		fmt.Printf("    %v\n", post.Description)
 		fmt.Printf("Link: %s\n", post.Url)
