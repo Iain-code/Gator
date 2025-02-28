@@ -17,10 +17,12 @@ func HandlerUsers(s *State, cmd Command) error {
 	for _, user := range userSlice {
 		if user.Name == s.Cfg.CurrentUserName {
 			fmt.Printf("%s (current)\n", user.Name)
-			fmt.Printf("current user ID: %v\n", user.ID)
 		} else {
 			fmt.Println(user.Name)
 		}
+	}
+	if len(userSlice) == 0 {
+		fmt.Println("No users found")
 	}
 	return nil
 }

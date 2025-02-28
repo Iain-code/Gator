@@ -1,31 +1,24 @@
 package state
 
 import (
-	"context"
 	"fmt"
-	"gator/internal/rss"
+	"time"
 )
 
 func HandlerAgg(s *State, cmd Command) error {
 
-	ctx := context.Background()
-	url := "https://www.wagslane.dev/index.xml"
-
-	rss, err := rss.FetchFeed(ctx, url)
+	if len(cmd.Arg) < 1 || len(cmd.Arg) > 2 {
+		return fmt.Errorf("wrong amount of arguements")
+	}
+	duration, err := time.ParseDuration(cmd.Arg[0])
 	if err != nil {
-		return err
-	}
-	fmt.Println(rss.Channel.Title)
-	fmt.Println(rss.Channel.Link)
-	fmt.Println(rss.Channel.Description)
-	fmt.Println(rss.Channel.Item)
-
-	for _, item := range rss.Channel.Item {
-		fmt.Println(item.Title)
-		fmt.Println(item.Link)
-		fmt.Println(item.Description)
-		fmt.Println(item.PubDate)
+		return fmt.Errorf("invalid duration: %w", err)
 	}
 
-	return nil
+	fmt.Printf("Collecting feeds every %v seconds\n", duration)
+
+	ticker := time.NewTicker(duration)
+	for ; ; <-ticker.C {
+		scrapeFeeds(s)
+	}
 }

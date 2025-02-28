@@ -11,8 +11,12 @@ import (
 func HandlerLogin(s *State, cmd Command) error {
 
 	ctx := context.Background()
-	_, err := s.Db.GetUser(ctx, cmd.Arg[0])
+	user, err := s.Db.GetUser(ctx, cmd.Arg[0])
 	// s.Db is a struct that contains all the QUERIES made by "sqlc generate"
+
+	if user.Name == "" {
+		fmt.Printf("no user named %v found\n", cmd.Arg[0])
+	}
 
 	if err != nil {
 		log.Fatal(err)

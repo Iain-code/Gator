@@ -3,6 +3,7 @@ package rss
 import (
 	"context"
 	"encoding/xml"
+	"fmt"
 	"html"
 	"io"
 	"net/http"
@@ -32,6 +33,7 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Get request made...")
 
 	client := &http.Client{}    // make the GO initialized client struct
 	resp, err := client.Do(req) // actually send the Request - and get the response
@@ -39,25 +41,27 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	fmt.Println("Get request sent...")
 
 	response, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println("Respose Received...")
 	err = xml.Unmarshal(response, rss)
-
+	fmt.Println("Respose Unmarshalled...")
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("rss.Channel.Title: %v\n", rss.Channel.Title)
 
-	html.UnescapeString(rss.Channel.Title) // removes all replacement char for things like < > ! etc
-	html.UnescapeString(rss.Channel.Description)
+	rss.Channel.Title = html.UnescapeString(rss.Channel.Title) // removes all replacement char for things like < > ! etc
+	rss.Channel.Description = html.UnescapeString(rss.Channel.Description)
 
-	for _, item := range rss.Channel.Item {
-		html.UnescapeString(item.Title)
-		html.UnescapeString(item.Description)
+	for i := range rss.Channel.Item {
+		rss.Channel.Item[i].Title = html.UnescapeString(rss.Channel.Item[i].Title)
+		rss.Channel.Item[i].Description = html.UnescapeString(rss.Channel.Item[i].Description)
 	}
-
+	fmt.Println("Returning RSS feed...")
 	return rss, nil
 }

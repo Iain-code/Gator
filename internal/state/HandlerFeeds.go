@@ -21,7 +21,10 @@ func HandlerFeeds(s *State, cmd Command) error {
 		fmt.Printf("Feed: %v\n", feed.Name)
 		fmt.Printf("URL: %v\n", feed.Url)
 		fmt.Printf("Created by: %v\n", user.Name)
+		fmt.Println("")
 	}
-
+	if len(feedSlice) == 0 {
+		fmt.Println("no feeds found")
+	}
 	return nil
 }

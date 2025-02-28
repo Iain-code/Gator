@@ -10,18 +10,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func HandlerAddFeed(s *State, cmd Command) error {
+func HandlerAddFeed(s *State, cmd Command, user database.User) error {
 
 	// this function adds an "RSS feed" instance into the feed table
 
-	currentuser := s.Cfg.CurrentUserName
 	ctx := context.Background()
 	arg := database.CreateFeedParams{}
-
-	user, err := s.Db.GetUser(ctx, currentuser)
-	if err != nil {
-		return err
-	}
 
 	if len(cmd.Arg) < 2 {
 		log.Fatal("no name and url found")
@@ -35,6 +29,13 @@ func HandlerAddFeed(s *State, cmd Command) error {
 		arg.UserID = user.ID
 
 		feed, err := s.Db.CreateFeed(ctx, arg)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("added %v RSS feed into %v profile\n", feed.Name, user.Name)
+		input := cmd.Arg[1:]
+		cmd.Arg = input
+		err = HandlerFollow(s, cmd, user)
 		if err != nil {
 			return err
 		}
