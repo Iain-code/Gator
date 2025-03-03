@@ -7,5 +7,5 @@ psql "postgres://postgres:disturbed9@localhost:5432/gator"
 
 
 for goose commands:
-goose -dir sql/schema postgres "postgres://postgres:disturbed9@localhost:5432/gator" up
-goose -dir sql/schema postgres "postgres://postgres:disturbed9@localhost:5432/gator" down
+goose -dir sql/schema postgres "postgres://postgres:@localhost:5432/gator" up
+goose -dir sql/schema postgres "postgres://postgres:@localhost:5432/gator" down
