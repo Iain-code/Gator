@@ -38,6 +38,7 @@ Install dependencies:
  ## Config
 
 Create a `.gatorconfig.json` file in your home directory with the following structure:
+Find your home dir with "echo $HOME"
 
 ```json
 {
@@ -46,7 +47,7 @@ Create a `.gatorconfig.json` file in your home directory with the following stru
 ```
 
 Replace the "username" value with your database connection string.
-Find your home dir with "echo $HOME"
+
 
 ## Usage
 
